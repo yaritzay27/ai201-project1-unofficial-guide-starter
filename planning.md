@@ -21,12 +21,12 @@ My Unofficial Guide focuses on Hunter College Computer Science and Mathematics c
 
 | # | Source | Description | URL or location |
 |---|--------|-------------|-----------------|
-| 1 | Hunter College CS Department Professors | All hunter college professor ratings in the Computer Science department | https://www.ratemyprofessors.com/search/professors/226?q=*&did=11 |
-| 2 | Hunter College Mathematics Department Professors | All hunter college professor ratings in the Mathematics department | https://www.ratemyprofessors.com/search/professors/226?q=*&did=38 |
-| 3 | Rate My Professors - CS Professor 1 | Raman Kannan, Professor in the Computer Science department at Hunter College | https://www.ratemyprofessors.com/professor/2448249 |
-| 4 | Rate My Professors - CS Professor 2 | Subash Shankar, Professor in the Computer Science department at Hunter College | https://www.ratemyprofessors.com/professor/257190 |
-| 5 | Rate My Professors - CS Professor 3 | Tong Yi, Professor in the Computer Science department at Hunter College, teaches CSCI 135 | https://www.ratemyprofessors.com/professor/2634841 |
-| 6 | Rate My Professors - CS Professor 4 | Justin Tojeira, Professor in the Computer Science department at Hunter College, teaches CSCI 265, 235, 335| https://www.ratemyprofessors.com/professor/1660967 |
+| 1 | Rate My Professors - CS Professor 1 | Susan Epstein, Professor in the Computer Science department at Hunter College | https://www.ratemyprofessors.com/professor/192300 |
+| 2 | Rate My Professors - CS Professor 2 | Sven Dietrich, Professor in the Computer Science department at Hunter College | https://www.ratemyprofessors.com/professor/2674099 |
+| 3 | Rate My Professors - CS Professor 3 | Raman Kannan, Professor in the Computer Science department at Hunter College | https://www.ratemyprofessors.com/professor/2448249 |
+| 4 | Rate My Professors - CS Professor 4 | Subash Shankar, Professor in the Computer Science department at Hunter College | https://www.ratemyprofessors.com/professor/257190 |
+| 5 | Rate My Professors - CS Professor 5 | Tong Yi, Professor in the Computer Science department at Hunter College, teaches CSCI 135 | https://www.ratemyprofessors.com/professor/2634841 |
+| 6 | Rate My Professors - CS Professor 6 | Justin Tojeira, Professor in the Computer Science department at Hunter College, teaches CSCI 265, 235, 335| https://www.ratemyprofessors.com/professor/1660967 |
 | 7 | Rate My Professors - Math Professor 1 | Roman Stelmach, Professor in the Mathematics department at Hunter College | https://www.ratemyprofessors.com/professor/535583|
 | 8 | Rate My Professors - Math Professor 2 | Robert Thompson, Professor in the Mathematics department at Hunter College | https://www.ratemyprofessors.com/professor/421746 |
 | 9 | Rate My Professors - Math Professor 3 | Ilya Kapovich, Professor in the Mathematics department at Hunter College | https://www.ratemyprofessors.com/professor/2408145 |
@@ -141,6 +141,8 @@ Grounded Response with Source Citations
 
 **Milestone 3 — Ingestion and chunking:**
 I will use ChatGPT and Codex to help implement document ingestion and chunking functions. I will provide my Domain, Documents, and Chunking Strategy sections from this planning document and ask the AI tools to generate Python code that loads professor review pages, cleans unnecessary content, and creates chunks according to my specified strategy. I will verify the output by manually inspecting chunk boundaries and confirming that individual reviews remain intact whenever possible.
+
+**Milestone 3 result:** The document pipeline produced 80 chunks across the 10 planned sources. Random chunk inspection showed readable professor summaries and review chunks with source metadata, course information, ratings, tags, and review text kept together.
 
 **Milestone 4 — Embedding and retrieval:**
 I will use ChatGPT and Codex to help implement the embedding and retrieval pipeline. I will provide my Retrieval Approach section and ask the AI tools to generate code that creates embeddings using all-MiniLM-L6-v2, stores them in ChromaDB, and retrieves the top-k most relevant chunks for a query. I will verify the implementation by running test queries and checking whether the returned chunks are relevant to the user's question.
