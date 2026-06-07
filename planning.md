@@ -74,7 +74,7 @@ My Unofficial Guide focuses on Hunter College Computer Science and Mathematics c
 
 | # | Question | Expected answer |
 |---|----------|-----------------|
-| 1 | What rating does Professor Roman Stelmach have on Rate My Professors? | 4.9/5 |
+| 1 | What positive traits do students mention about Roman Stelmach? | Students describe him as caring, sweet, generous with grading, clear at teaching, and helpful with understanding the material. |
 | 2 | What complaints appear most often in reviews for Professor Subash Shankar? | Heavy homework and difficult exams |
 | 3 | What course is Professor Tong Yi most frequently reviewed for? | CSCI 135 |
 | 4 | What positive trait is most commonly mentioned about Professor Yuna Won? | Clear explanations |

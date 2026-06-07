@@ -1,0 +1,88 @@
+(.venv) yaritzay27@yaritzay27:/mnt/c/Users/yaritza/Documents/Coding_Local/AI201/ai201-project1-unofficial-guide-starter$ python3 retrieval_pipeline.py --test
+Loading embedding model: all-MiniLM-L6-v2
+Chroma collection already has 80 current chunks; skipping embedding.
+
+========================================================================================
+Query: What positive traits do students mention about Roman Stelmach?
+
+----------------------------------------------------------------------------------------
+1. planning-url-7-0005 | distance=0.3332 | Rate My Professors - Roman Stelmach | chunk 5
+Source: https://www.ratemyprofessors.com/professor/535583
+Professor: Roman Stelmach. Course: STAT213. Date: 2026-01-07 04:59:45. Quality: 5. Clarity: 5. Difficulty: 5. Attendance: mandatory. Would take again: Yes. Grade: B+. Tags: Amazing lectures, Caring, Respected. Review: He's so nice and sweet. He's like everyone's grandpa. He makes sure you understand the lecture and the tests are not heavy. .
+
+----------------------------------------------------------------------------------------
+2. planning-url-7-0003 | distance=0.3745 | Rate My Professors - Roman Stelmach | chunk 3
+Source: https://www.ratemyprofessors.com/professor/535583
+Professor: Roman Stelmach. Course: STAT213. Date: 2026-05-26 22:10:30. Quality: 5. Clarity: 5. Difficulty: 1. Attendance: non mandatory. Would take again: Yes. Grade: A. Tags: Amazing lectures. Review: Very nice, great at teaching, and good grader. .
+
+----------------------------------------------------------------------------------------
+3. planning-url-7-0002 | distance=0.3801 | Rate My Professors - Roman Stelmach | chunk 2
+Source: https://www.ratemyprofessors.com/professor/535583
+Professor: Roman Stelmach. Course: STAT213. Date: 2026-05-28 19:33:43. Quality: 5. Clarity: 5. Difficulty: 2. Attendance: mandatory. Would take again: Yes. Grade: A. Tags: Gives good feedback, Hilarious, Caring. Review: Was a very great professor, was very caring. He grades lightly and cares if you understand the work. .
+
+----------------------------------------------------------------------------------------
+4. planning-url-7-0004 | distance=0.4266 | Rate My Professors - Roman Stelmach | chunk 4
+Source: https://www.ratemyprofessors.com/professor/535583
+Professor: Roman Stelmach. Course: STAT213. Date: 2026-05-26 03:55:14. Quality: 5. Clarity: 5. Difficulty: 3. Attendance: mandatory. Would take again: Yes. Grade: A-. Tags: Amazing lectures, Caring, Respected. Review: THE BEST PROFESSOR AT HUNTER. He really teaches material that will be on exams and cares about his students' progress. Take him, and you will not regret..
+
+----------------------------------------------------------------------------------------
+5. planning-url-7-0001 | distance=0.4544 | Rate My Professors - Roman Stelmach | chunk 1
+Source: https://www.ratemyprofessors.com/professor/535583
+Professor: Roman Stelmach. Course: STAT213. Date: 2026-06-01 03:01:45. Quality: 5. Clarity: 5. Difficulty: 2. Attendance: mandatory. Would take again: Yes. Grade: A-. Review: Really sweet and caring professor. He grades very generously, and his exams are directly related to his review sessions, so don't miss them. He makes sure you understand all the material each class, and the homework helps a lot. .
+
+========================================================================================
+Query: What complaints appear most often in reviews for Professor Subash Shankar?
+
+----------------------------------------------------------------------------------------
+1. planning-url-4-0001 | distance=0.3066 | Rate My Professors - Subash Shankar | chunk 1
+Source: https://www.ratemyprofessors.com/professor/257190
+Professor: Subash Shankar. Course: 260. Date: 2026-03-31 21:25:05. Quality: 1. Clarity: 1. Difficulty: 5. Attendance: mandatory. Grade: Not sure yet. Tags: Tough grader, Lots of homework, Graded by few things. Review: No material to review, lectures made on the fly by hand with frequent mistakes. Long tangents that do not pertain to material actually needed to complete assignments or exams. Through me into a quarter life crisis. You will feel like a victim after exams. Good luck. .
+
+----------------------------------------------------------------------------------------
+2. planning-url-4-0008 | distance=0.3102 | Rate My Professors - Subash Shankar | chunk 8
+Source: https://www.ratemyprofessors.com/professor/257190
+Professor: Subash Shankar. Course: CSCI260. Date: 2025-06-04 15:02:18. Quality: 2. Clarity: 2. Difficulty: 4. Attendance: mandatory. Grade: Rather not say. Tags: Lots of homework, Lecture heavy. Review: Professor was not really good. He doesn't give you a lot to work with outside of the lectures so you'll be stuck on tutoring or self-teaching to fill in the gaps, but he's not a very tough grader. I did straight up fall asleep through a lot of his lectures though, not by choice.
+
+----------------------------------------------------------------------------------------
+3. planning-url-4-0007 | distance=0.3103 | Rate My Professors - Subash Shankar | chunk 7
+Source: https://www.ratemyprofessors.com/professor/257190
+Professor: Subash Shankar. Course: CSCI260. Date: 2025-12-20 23:34:06. Quality: 1. Clarity: 1. Difficulty: 5. Attendance: mandatory. Grade: Not sure yet. Tags: Tough grader, Lecture heavy, Test heavy. Review: The best thing I've gotten from his existence is an image of him sucking on a banana from the Whatsapp group chat. .
+
+----------------------------------------------------------------------------------------
+4. planning-url-4-0009 | distance=0.3146 | Rate My Professors - Subash Shankar | chunk 9
+Source: https://www.ratemyprofessors.com/professor/257190
+Professor: Subash Shankar. Course: CSCI260. Date: 2025-06-04 15:02:18. Quality: 2. Clarity: 2. Difficulty: 4. Attendance: mandatory. Grade: Rather not say. Tags: Lots of homework, Lecture heavy. Review: Overall, not the worst, but definitely a last-resort choice..
+
+----------------------------------------------------------------------------------------
+5. planning-url-4-0004 | distance=0.3436 | Rate My Professors - Subash Shankar | chunk 4
+Source: https://www.ratemyprofessors.com/professor/257190
+Professor: Subash Shankar. Course: CSCI260. Date: 2026-03-24 18:55:11. Quality: 1. Clarity: 1. Difficulty: 1. Attendance: mandatory. Tags: Tough grader, Lots of homework, Lecture heavy. Review: This class felt extremely frustrating. The course relies heavily on a curve, which already shows how difficult it is to succeed. During lectures, there were frequent mistakes and confusion in explanations, which made it harder to understand the material.
+
+========================================================================================
+Query: What course is Professor Tong Yi most frequently reviewed for?
+
+----------------------------------------------------------------------------------------
+1. planning-url-5-0004 | distance=0.2484 | Rate My Professors - Tong Yi | chunk 4
+Source: https://www.ratemyprofessors.com/professor/2634841
+Professor: Tong Yi. Course: CS13500. Date: 2025-08-28 09:02:59. Quality: 2. Clarity: 2. Difficulty: 5. Attendance: mandatory. Grade: A. Review: Tong Yi is a really nice and kind professor but her class was challenging. Her accent is hard to understand so lectures were pretty useless. Difficulty and lecture in class doesn't reflect in the assignments/projects (much harder). Attend recitations, go tutoring, and study past exams A LOT if you want to pass..
+
+----------------------------------------------------------------------------------------
+2. planning-url-5-0007 | distance=0.2782 | Rate My Professors - Tong Yi | chunk 7
+Source: https://www.ratemyprofessors.com/professor/2634841
+Professor: Tong Yi. Course: CS13500. Date: 2025-07-23 00:30:01. Quality: 1. Clarity: 1. Difficulty: 2. Attendance: mandatory. Grade: A-. Review: cant understand her, the only reason I passed was because I went to tutoring.
+
+----------------------------------------------------------------------------------------
+3. planning-url-5-0006 | distance=0.2836 | Rate My Professors - Tong Yi | chunk 6
+Source: https://www.ratemyprofessors.com/professor/2634841
+Professor: Tong Yi. Course: CS135. Date: 2025-08-26 16:25:40. Quality: 1. Clarity: 1. Difficulty: 4. Attendance: mandatory. Grade: A. Tags: Tough grader, Lecture heavy. Review: Honestly, the only good part was the material she put online, people complain about the final but she posted the last 3 years of finals. .
+
+----------------------------------------------------------------------------------------
+4. planning-url-5-0002 | distance=0.2851 | Rate My Professors - Tong Yi | chunk 2
+Source: https://www.ratemyprofessors.com/professor/2634841
+Professor: Tong Yi. Course: CS13500. Date: 2026-04-30 17:33:59. Quality: 1. Clarity: 1. Difficulty: 3. Attendance: non mandatory. Grade: A-. Tags: Lecture heavy, Test heavy, Graded by few things. Review: It's frustrating to struggle in an introductory course not because the material is too hard, but because it's difficult to understand how it's being taught.
+
+----------------------------------------------------------------------------------------
+5. planning-url-5-0003 | distance=0.2987 | Rate My Professors - Tong Yi | chunk 3
+Source: https://www.ratemyprofessors.com/professor/2634841
+Professor: Tong Yi. Course: CS13500. Date: 2026-04-30 17:33:59. Quality: 1. Clarity: 1. Difficulty: 3. Attendance: non mandatory. Grade: A-. Tags: Lecture heavy, Test heavy, Graded by few things. Review: Many students don't have English as a first language, and there should be more effort to make the material clear and accessible for everyone..
+(.venv) yaritzay27@yaritzay27:/mnt/c/Users/yaritza/Documents/Coding_Local/AI201/ai201-project1-unofficial-guide-starter$ 
