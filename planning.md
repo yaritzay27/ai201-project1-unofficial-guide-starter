@@ -117,7 +117,8 @@ Embeddings (sentence-transformers all-MiniLM-L6-v2)
 v 
 Vector Store (ChromaDB) 
 | 
-v Retrieval (Top-k Semantic Search) 
+v 
+Retrieval (Top-k Semantic Search) 
 | 
 v 
 Generation (Groq API llama-3.3-70b-versatile) 
