@@ -10,7 +10,7 @@
 ## Domain
 
 <!-- What domain did you choose? Why is this knowledge valuable and hard to find through official channels? -->
-My Unofficial Guide focuses on Hunter College Computer Science and Mathematics course experiences, professor reviews, and student advice. This knowledge is valuable because students often rely on scattered sources such as Reddit discussions, Rate My Professors reviews, and word-of-mouth recommendations when choosing classes. By bringing these sources together into a searchable system, students can quickly find information about workload, teaching styles, course difficulty, and academic success strategies.
+My Unofficial Guide focuses on Hunter College Computer Science and Mathematics professor reviews, course experiences, difficulty, workload, grading, and student advice. This information is valuable because official course descriptions do not usually explain how students experience a professor's teaching style, exams, grading, or workload. Students often rely on scattered Rate My Professors pages and informal advice, so this project brings those reviews into one searchable grounded assistant.
 
 ---
 
@@ -78,7 +78,7 @@ My Unofficial Guide focuses on Hunter College Computer Science and Mathematics c
 | 2 | What complaints appear most often in reviews for Professor Subash Shankar? | Heavy homework and difficult exams |
 | 3 | What course is Professor Tong Yi most frequently reviewed for? | CSCI 135 |
 | 4 | What positive trait is most commonly mentioned about Professor Yuna Won? | Clear explanations |
-| 5 | What negative trait is most commonly mentioned about Professor Justin Tojeira? | Slow grading |
+| 5 | What negative trait is most commonly mentioned about Professor Justin Tojeira? | Self-Learning class |
 
 ---
 

@@ -131,7 +131,7 @@ def handle_query(question: str) -> tuple[str, str, str]:
     return result["answer"], sources, chunks
 
 
-with gr.Blocks(title="Hunter Unofficial Guide", css=HUNTER_CSS) as demo:
+with gr.Blocks(title="Hunter Unofficial Guide") as demo:
     with gr.Column(elem_classes=["hunter-shell"]):
         gr.Markdown("# Hunter Unofficial Guide", elem_classes=["hunter-title"])
 
@@ -158,4 +158,4 @@ with gr.Blocks(title="Hunter Unofficial Guide", css=HUNTER_CSS) as demo:
 
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(css=HUNTER_CSS)
