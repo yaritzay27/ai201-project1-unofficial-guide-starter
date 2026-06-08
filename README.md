@@ -127,3 +127,35 @@ To run the evaluation helper:
 ```bash
 python3 run_evaluation.py
 ```
+
+## Stretch Feature: Chunking Strategy Comparison
+
+I compared two chunking strategies on the same retrieval query set:
+
+1. **Review-aware chunking:** the main project strategy, where each professor summary or individual review is kept together when possible.
+2. **Fixed-size chunking:** an alternate strategy generated from the cleaned documents using 500-character chunks with 75-character overlap.
+
+The comparison uses `all-MiniLM-L6-v2` for both strategies and checks the top retrieved chunk for three queries:
+
+- What positive traits do students mention about Roman Stelmach?
+- What complaints appear most often in reviews for Professor Subash Shankar?
+- What course is Professor Tong Yi most frequently reviewed for?
+
+To reproduce the comparison, run:
+
+```bash
+python3 compare_chunking.py
+```
+
+The review-aware strategy produced 80 chunks. The fixed-size strategy produced 59 chunks.
+
+| Query | Strategy | Top source | Distance | Relevance | Top chunk excerpt |
+|---|---|---|---:|---|---|
+| What positive traits do students mention about Roman Stelmach? | Review-aware | Rate My Professors - Roman Stelmach | 0.3332 | Relevant | Professor: Roman Stelmach. Course: STAT213. Date: 2026-01-07... |
+| What positive traits do students mention about Roman Stelmach? | Fixed-size 500 chars | Rate My Professors - Roman Stelmach | 0.4136 | Relevant | ng. Review: Was a very great professor, was very caring... |
+| What complaints appear most often in reviews for Professor Subash Shankar? | Review-aware | Rate My Professors - Subash Shankar | 0.3066 | Relevant | Professor: Subash Shankar. Course: 260. Date: 2026-03-31... |
+| What complaints appear most often in reviews for Professor Subash Shankar? | Fixed-size 500 chars | Rate My Professors - Subash Shankar | 0.3545 | Relevant | Brightspace, nor answers to homework. No practice material... |
+| What course is Professor Tong Yi most frequently reviewed for? | Review-aware | Rate My Professors - Tong Yi | 0.2484 | Relevant | Professor: Tong Yi. Course: CS13500. Date: 2025-08-28... |
+| What course is Professor Tong Yi most frequently reviewed for? | Fixed-size 500 chars | Rate My Professors - Tong Yi | 0.3200 | Relevant | k. Review: The professor is a tough grader... |
+
+Both strategies retrieved the correct professor for all three queries, but the review-aware strategy performed better on every query because its distance scores were lower. It also produced cleaner top chunks: the review-aware chunks begin with professor metadata and preserve the course, ratings, tags, and review text together. The fixed-size chunks were relevant, but their excerpts often started in the middle of words or sentences, such as "ng. Review..." or "Brightspace, nor answers...". This makes them harder for the LLM and the user to interpret. Based on these results, the review-aware chunking strategy is the better fit for this review-heavy corpus.
