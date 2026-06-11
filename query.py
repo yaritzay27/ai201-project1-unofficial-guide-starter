@@ -63,17 +63,24 @@ def get_groq_client() -> Groq:
     return Groq(api_key=api_key)
 
 
-def ask(question: str, top_k: int = DEFAULT_TOP_K) -> dict[str, Any]:
+def ask(
+    question: str,
+    top_k: int = DEFAULT_TOP_K,
+    source_filter: str | None = None,
+    history: list[dict[str, str]] | None = None,
+) -> dict[str, Any]:
     question = question.strip()
     if not question:
         return {"answer": "Please enter a question.", "sources": [], "chunks": []}
 
-    summary_result = answer_summary_question(question)
+    normalized_filter = normalize_source_filter(source_filter)
+    summary_result = answer_summary_question(question, normalized_filter)
     if summary_result:
         return summary_result
 
     model, collection = get_retrieval_resources()
-    chunks = retrieve(question, model, collection, top_k)
+    retrieval_query = contextualize_question(question, history or [])
+    chunks = retrieve(retrieval_query, model, collection, top_k, source_filter=normalized_filter)
 
     if not chunks or chunks[0].distance > MAX_ACCEPTABLE_DISTANCE:
         return {
@@ -82,7 +89,7 @@ def ask(question: str, top_k: int = DEFAULT_TOP_K) -> dict[str, Any]:
             "chunks": chunks_to_dicts(chunks),
         }
 
-    answer = generate_answer(question, chunks)
+    answer = generate_answer(question, chunks, history or [])
     return {
         "answer": answer,
         "sources": format_sources(chunks),
@@ -90,7 +97,7 @@ def ask(question: str, top_k: int = DEFAULT_TOP_K) -> dict[str, Any]:
     }
 
 
-def answer_summary_question(question: str) -> dict[str, Any] | None:
+def answer_summary_question(question: str, source_filter: str | None = None) -> dict[str, Any] | None:
     intent = summary_question_intent(question)
     if not intent:
         return None
@@ -98,6 +105,8 @@ def answer_summary_question(question: str) -> dict[str, Any] | None:
     chunks = load_chunks(CHUNKS_PATH)
     summaries = [parse_professor_summary(chunk) for chunk in chunks]
     summaries = [summary for summary in summaries if summary]
+    if source_filter:
+        summaries = [summary for summary in summaries if summary["chunk"].get("source_name") == source_filter]
     department_filter = requested_department(question)
     if department_filter:
         summaries = [summary for summary in summaries if summary["department"].lower() == department_filter.lower()]
@@ -126,6 +135,41 @@ def answer_summary_question(question: str) -> dict[str, Any] | None:
 
     answer = format_summary_answer(selected, intent)
     return {"answer": answer, "sources": sources, "chunks": chunks_for_output}
+
+
+def source_choices() -> list[str]:
+    chunks = load_chunks(CHUNKS_PATH)
+    names = sorted({str(chunk.get("source_name", "")) for chunk in chunks if chunk.get("source_name")})
+    return ["All sources"] + names
+
+
+def normalize_source_filter(source_filter: str | None) -> str | None:
+    if not source_filter or source_filter == "All sources":
+        return None
+    return source_filter
+
+
+def contextualize_question(question: str, history: list[dict[str, str]]) -> str:
+    if not history or not is_follow_up(question):
+        return question
+    recent = history[-1]
+    return (
+        f"Previous user question: {recent.get('question', '')}\n"
+        f"Previous assistant answer: {recent.get('answer', '')}\n"
+        f"Follow-up question: {question}"
+    )
+
+
+def is_follow_up(question: str) -> bool:
+    normalized = question.lower().strip()
+    if len(normalized.split()) <= 5:
+        return True
+    return bool(
+        re.search(
+            r"\b(he|she|his|her|they|them|that professor|this professor|what about|how about|their)\b",
+            normalized,
+        )
+    )
 
 
 def summary_question_intent(question: str) -> str | None:
@@ -256,10 +300,14 @@ def extract_number(text: str, pattern: str) -> float | None:
     return float(match.group(1)) if match else None
 
 
-def generate_answer(question: str, chunks: list[RetrievedChunk]) -> str:
+def generate_answer(question: str, chunks: list[RetrievedChunk], history: list[dict[str, str]] | None = None) -> str:
     context = format_context(chunks)
+    conversation = format_history(history or [])
     user_prompt = f"""Question:
 {question}
+
+Recent conversation:
+{conversation}
 
 Retrieved documents:
 {context}
@@ -276,6 +324,16 @@ Answer the question using only the retrieved documents above."""
         max_tokens=450,
     )
     return response.choices[0].message.content.strip()
+
+
+def format_history(history: list[dict[str, str]]) -> str:
+    if not history:
+        return "No previous conversation."
+    recent = history[-2:]
+    blocks = []
+    for turn in recent:
+        blocks.append(f"User: {turn.get('question', '')}\nAssistant: {turn.get('answer', '')}")
+    return "\n\n".join(blocks)
 
 
 def format_context(chunks: list[RetrievedChunk]) -> str:

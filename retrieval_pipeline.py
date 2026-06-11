@@ -152,13 +152,22 @@ def text_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:16]
 
 
-def retrieve(query: str, model: SentenceTransformer, collection: Any, top_k: int) -> list[RetrievedChunk]:
+def retrieve(
+    query: str,
+    model: SentenceTransformer,
+    collection: Any,
+    top_k: int,
+    source_filter: str | None = None,
+) -> list[RetrievedChunk]:
     query_embedding = model.encode([query], normalize_embeddings=True)[0].tolist()
-    results = collection.query(
-        query_embeddings=[query_embedding],
-        n_results=top_k,
-        include=["documents", "metadatas", "distances"],
-    )
+    query_args: dict[str, Any] = {
+        "query_embeddings": [query_embedding],
+        "n_results": top_k,
+        "include": ["documents", "metadatas", "distances"],
+    }
+    if source_filter:
+        query_args["where"] = {"source_name": source_filter}
+    results = collection.query(**query_args)
 
     retrieved: list[RetrievedChunk] = []
     ids = results.get("ids", [[]])[0]

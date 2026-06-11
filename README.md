@@ -213,3 +213,27 @@ The review-aware strategy produced 80 chunks. The fixed-size strategy produced 5
 | What course is Professor Tong Yi most frequently reviewed for? | Fixed-size 500 chars | Rate My Professors - Tong Yi | 0.3200 | Relevant | k. Review: The professor is a tough grader... |
 
 Both strategies retrieved the correct professor for all three queries, but the review-aware strategy performed better on every query because its distance scores were lower. It also produced cleaner top chunks: the review-aware chunks begin with professor metadata and preserve the course, ratings, tags, and review text together. The fixed-size chunks were relevant, but their excerpts often started in the middle of words or sentences, such as "ng. Review..." or "Brightspace, nor answers...". This makes them harder for the LLM and the user to interpret. Based on these results, the review-aware chunking strategy is the better fit for this review-heavy corpus.
+
+## Stretch Feature: Metadata Filtering
+
+The Gradio interface includes a `Professor/source filter` dropdown. This filters retrieval by the ChromaDB metadata field `source_name`, which is stored for every chunk. For example, selecting `Rate My Professors - Subash Shankar` and asking `What do students say about exams?` restricts retrieved chunks to Subash Shankar's page only. Without the filter, the same broad exam question may retrieve chunks from several professors. With the filter, the returned sources and retrieved chunks visibly come only from the selected professor.
+
+This is implemented in `retrieval_pipeline.py` by passing a Chroma `where` filter:
+
+```python
+where = {"source_name": source_filter} if source_filter else None
+collection.query(..., where=where)
+```
+
+## Stretch Feature: Conversational Memory
+
+The Gradio app stores recent turns in `gr.State` and displays them in the `Conversation memory` box. Follow-up questions are contextualized with the previous user question and answer before retrieval. This lets the second query refer back to the first instead of starting from scratch.
+
+Example multi-turn exchange:
+
+1. User asks: `What positive traits do students mention about Roman Stelmach?`
+2. The app answers with Roman Stelmach traits such as caring, sweet, generous grading, and helpful teaching, with Roman Stelmach sources.
+3. User asks a follow-up: `What about his difficulty?`
+4. The app uses the previous turn to understand that `his` refers to Roman Stelmach, retrieves Roman Stelmach chunks again, and answers using his difficulty information rather than switching to an unrelated professor.
+
+This is implemented in `query.py` with `contextualize_question()`, which prepends the previous turn when the new question looks like a follow-up.

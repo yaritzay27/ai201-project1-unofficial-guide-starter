@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import gradio as gr
 
-from query import ask
+from query import ask, source_choices
 
 
 HUNTER_CSS = """
@@ -118,24 +118,36 @@ EXAMPLES = [
 ]
 
 
-def handle_query(question: str) -> tuple[str, str, str]:
-    result = ask(question)
+def handle_query(question: str, source_filter: str, history: list[dict[str, str]]) -> tuple[str, str, str, str, list[dict[str, str]]]:
+    history = history or []
+    result = ask(question, source_filter=source_filter, history=history)
     sources = "\n".join(f"- {source}" for source in result["sources"]) or "No supporting sources found."
     chunks = "\n\n".join(
         (
-            f"{chunk['chunk_id']} | distance={chunk['distance']:.4f} | {chunk['source_name']}\n"
+            f"S{index} | {chunk['chunk_id']} | distance={chunk['distance']:.4f} | {chunk['source_name']}\n"
             f"{chunk['text']}"
         )
-        for chunk in result["chunks"]
+        for index, chunk in enumerate(result["chunks"], start=1)
     )
-    return result["answer"], sources, chunks
+    updated_history = history + [{"question": question, "answer": result["answer"]}]
+    memory = "\n\n".join(
+        f"User: {turn['question']}\nAssistant: {turn['answer']}" for turn in updated_history[-3:]
+    )
+    return result["answer"], sources, chunks, memory, updated_history
 
 
 with gr.Blocks(title="Hunter Unofficial Guide") as demo:
+    conversation_state = gr.State([])
     with gr.Column(elem_classes=["hunter-shell"]):
         gr.Markdown("# Hunter Unofficial Guide", elem_classes=["hunter-title"])
 
         with gr.Group(elem_classes=["hunter-panel"]):
+            source_filter = gr.Dropdown(
+                label="Professor/source filter",
+                choices=source_choices(),
+                value="All sources",
+                interactive=True,
+            )
             question = gr.Textbox(
                 label="Your question",
                 lines=2,
@@ -149,12 +161,24 @@ with gr.Blocks(title="Hunter Unofficial Guide") as demo:
             answer = gr.Textbox(label="Answer", lines=8, elem_classes=["hunter-output"])
             sources = gr.Textbox(label="Retrieved from", lines=5, elem_classes=["hunter-sources"])
             retrieved_chunks = gr.Textbox(label="Retrieved chunks", lines=12, elem_classes=["hunter-debug"])
+            memory = gr.Textbox(label="Conversation memory", lines=7, elem_classes=["hunter-debug"])
 
         gr.Examples(examples=EXAMPLES, inputs=question)
 
-        ask_button.click(handle_query, inputs=question, outputs=[answer, sources, retrieved_chunks])
-        question.submit(handle_query, inputs=question, outputs=[answer, sources, retrieved_chunks])
-        clear_button.click(lambda: ("", "", "", ""), outputs=[question, answer, sources, retrieved_chunks])
+        ask_button.click(
+            handle_query,
+            inputs=[question, source_filter, conversation_state],
+            outputs=[answer, sources, retrieved_chunks, memory, conversation_state],
+        )
+        question.submit(
+            handle_query,
+            inputs=[question, source_filter, conversation_state],
+            outputs=[answer, sources, retrieved_chunks, memory, conversation_state],
+        )
+        clear_button.click(
+            lambda: ("", "", "", "", "", []),
+            outputs=[question, answer, sources, retrieved_chunks, memory, conversation_state],
+        )
 
 
 if __name__ == "__main__":
