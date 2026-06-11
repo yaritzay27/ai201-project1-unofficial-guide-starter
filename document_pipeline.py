@@ -395,6 +395,8 @@ def review_or_paragraph_blocks(text: str) -> list[str]:
     paragraphs = [block for block in paragraphs if len(block) >= MIN_CHARS]
     if len(paragraphs) >= 2:
         return paragraphs
+    if ". Review:" in text:
+        return [normalize_chunk(text)]
 
     review_splits = re.split(
         r"(?=\b(?:Review|Student Review|Professor Review)\b[:\s])",

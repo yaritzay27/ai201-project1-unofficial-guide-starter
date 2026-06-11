@@ -31,6 +31,14 @@ The ingestion script saves fetched raw pages in `data/raw/`, cleaned text in `da
 
 **Final chunk count:** 80 chunks across 10 Rate My Professors sources.
 
+**Five labeled sample chunks:**
+
+1. `planning-url-3-0000` - Raman Kannan summary: "Professor: Raman Kannan. Department: Computer Science. School: Hunter College. Average rating: 4.2/5..."
+2. `planning-url-3-0001` - Raman Kannan review: "Overall, Mr. Raman has been an incredible professor. He takes time to break down each subject..."
+3. `planning-url-4-0001` - Subash Shankar review: "No material to review, lectures made on the fly by hand with frequent mistakes..."
+4. `planning-url-5-0000` - Tong Yi summary: "Professor: Tong Yi. Department: Computer Science... Reviewed courses: CS135, CS13500, CSCI127, CSCI135..."
+5. `planning-url-7-0002` - Roman Stelmach review: "Was a very great professor, was very caring. He grades lightly and cares if you understand the work."
+
 ## Embedding Model
 
 **Model used:** all-MiniLM-L6-v2 (Sentence Transformers)
@@ -56,6 +64,24 @@ Keep the answer concise and directly tied to the retrieved evidence.
 
 **How source attribution is surfaced in the response:** Retrieved chunks are formatted as `[S1]`, `[S2]`, etc. in the prompt, and the model is instructed to cite those markers in the answer. The Gradio app also appends a programmatic source list from chunk metadata, so the interface shows which Rate My Professors page the answer came from even if the model's wording changes. For unsupported questions, the app returns "I don't have enough information on that" and does not list supporting sources.
 
+**Full example response with visible source attribution:**
+
+Question: `What positive traits do students mention about Roman Stelmach?`
+
+Answer: Students mention that Roman Stelmach is nice, sweet, caring, gives good feedback, has amazing lectures, is a good grader, grades generously, and helps students understand the material [S1, S2, S3, S4, S5].
+
+Retrieved from:
+
+- Rate My Professors - Roman Stelmach (https://www.ratemyprofessors.com/professor/535583)
+
+**Out-of-scope example response:**
+
+Question: `What do students say about Hunter College parking?`
+
+Answer: I don't have enough information on that.
+
+The retrieved chunks were weak and scattered across unrelated professor pages, so the app declined instead of generating an unsupported answer.
+
 ## Evaluation Report
 
 I ran the system on the five questions from `planning.md`. The table below summarizes the behavior I observed. The exact wording can vary slightly because generation uses Groq's `llama-3.3-70b-versatile`, but each answer was checked against the retrieved chunks and source list.
@@ -70,6 +96,14 @@ I ran the system on the five questions from `planning.md`. The table below summa
 
 **Retrieval quality:** Relevant / Partially relevant / Off-target  
 **Response accuracy:** Accurate / Partially accurate / Inaccurate
+
+**Top retrieved chunks for representative queries:**
+
+| Query | Top returned chunks | Why relevant |
+|---|---|---|
+| What positive traits do students mention about Roman Stelmach? | `planning-url-7-0005` distance 0.3332; `planning-url-7-0003` distance 0.3745; `planning-url-7-0002` distance 0.3801 | All top chunks are Roman Stelmach reviews and mention traits such as nice, sweet, caring, generous grading, and helping students understand material. |
+| What complaints appear most often in reviews for Professor Subash Shankar? | `planning-url-4-0001` distance 0.3066; `planning-url-4-0008` distance 0.3102; `planning-url-4-0004` distance 0.3436 | The top chunks are Subash Shankar reviews and mention homework, limited resources, lecture confusion, and difficult grading/exams. |
+| What course is Professor Tong Yi most frequently reviewed for? | `planning-url-5-0004` distance 0.2484; `planning-url-5-0007` distance 0.2782; `planning-url-5-0006` distance 0.2836 | The top chunks are Tong Yi reviews and show course variants such as `CS13500` and `CS135`, supporting the CSCI 135 answer. |
 
 ## Failure Case Analysis
 
@@ -122,10 +156,30 @@ python3 app.py
 
 Then open `http://localhost:7860`.
 
+**Sample Gradio interaction transcript:**
+
+User: `What positive traits do students mention about Roman Stelmach?`
+
+Answer: The app summarized that students describe Roman Stelmach as nice, sweet, caring, helpful, generous with grading, and good at explaining material. The answer cited `[S1]` through `[S5]`.
+
+Retrieved from: `Rate My Professors - Roman Stelmach`.
+
+User: `What do students say about CSCI 135?`
+
+Answer: `I don't have enough information on that.`
+
+Retrieved from: weak closest matches from unrelated or only partially related professor chunks, demonstrating the course-code normalization failure discussed above.
+
 To run the evaluation helper:
 
 ```bash
 python3 run_evaluation.py
+```
+
+To run deterministic unit tests for parsing, cleaning, and chunking:
+
+```bash
+python3 -m unittest tests.test_document_pipeline
 ```
 
 ## Stretch Feature: Chunking Strategy Comparison
